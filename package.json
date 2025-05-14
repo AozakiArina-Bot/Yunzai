@@ -1,7 +1,7 @@
 {
   "name": "trss-yunzai",
-  "version": "3.1.3",
-  "author": "TimeRainStarSky, Yoimiya-Kokomi, Le-niao",
+  "version": "3.1.7",
+  "author": "AozaikiArina",
   "description": "Bot",
   "main": "app.js",
   "type": "module",
