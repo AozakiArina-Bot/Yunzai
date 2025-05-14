@@ -1109,12 +1109,10 @@ Bot.adapter.push(new class OneBotv11Adapter {
   }
 
   load () {
-    for (const i of [this.path, "go-cqhttp"]) {
-      if (!Array.isArray(Bot.wsf[i]))
-      { Bot.wsf[i] = [] }
-      Bot.wsf[i].push((ws, ...args) =>
-        ws.on("message", data => this.message(data, ws, ...args))
-      )
-    }
+    if (!Array.isArray(Bot.wsf[this.path]))
+    { Bot.wsf[this.path] = [] }
+    Bot.wsf[this.path].push((ws, ...args) =>
+      ws.on("message", data => this.message(data, ws, ...args))
+    )
   }
 }())

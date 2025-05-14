@@ -30,7 +30,8 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
         msg.permission = 1
       } else {
         msg.permission = 0
-        if (!Array.isArray(button.permission)) { button.permission = [button.permission] }
+        if (!Array.isArray(button.permission))
+        { button.permission = [button.permission] }
         msg.specify_user_ids = button.permission
       }
     }
@@ -51,16 +52,19 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
   }
 
   async makeMsg (msg) {
-    if (!Array.isArray(msg)) { msg = [msg] }
+    if (!Array.isArray(msg))
+    { msg = [msg] }
     const msgs = []
     for (let i of msg) {
-      if (typeof i !== "object") { i = { type: "text", text: i } }
+      if (typeof i !== "object")
+      { i = { type: "text", text: i } }
 
       if (i.file) {
         i.file = await Bot.Buffer(i.file, {
           http: true, size: 10485760
         })
-        if (Buffer.isBuffer(i.file)) { i.file = `base64://${i.file.toString("base64")}` }
+        if (Buffer.isBuffer(i.file))
+        { i.file = `base64://${i.file.toString("base64")}` }
       }
 
       switch (i.type) {
@@ -92,7 +96,8 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
           break
         case "node": {
           const array = []
-          for (const { message } of i.data) { array.push(...await this.makeMsg(message)) }
+          for (const { message } of i.data)
+          { array.push(...await this.makeMsg(message)) }
           i.data = array
           break
         } case "raw":
@@ -231,7 +236,8 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
       this.makeBot(data, ws)
     }
 
-    if (!data.bot.fl.has(data.user_id)) { data.bot.fl.set(data.user_id, data.sender) }
+    if (!data.bot.fl.has(data.user_id))
+    { data.bot.fl.set(data.user_id, data.sender) }
 
     for (const i of raw.content) {
       switch (i.type) {
@@ -272,13 +278,15 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
       data.message_type = "group"
       data.group_id = `${raw.user_type}-${raw.group_id}`
 
-      if (!data.bot.gl.has(data.group_id)) { data.bot.gl.set(data.group_id, { group_id: data.group_id }) }
+      if (!data.bot.gl.has(data.group_id))
+      { data.bot.gl.set(data.group_id, { group_id: data.group_id }) }
       let gml = data.bot.gml.get(data.group_id)
       if (!gml) {
         gml = new Map()
         data.bot.gml.set(data.group_id, gml)
       }
-      if (!gml.has(data.user_id)) { gml.set(data.user_id, data.sender) }
+      if (!gml.has(data.user_id))
+      { gml.set(data.user_id, data.sender) }
 
       Bot.makeLog("info", `群消息：${data.raw_message}`, `${data.self_id} <= ${data.group_id}, ${data.user_id}`, true)
     }
@@ -287,7 +295,8 @@ Bot.adapter.push(new class GSUIDCoreAdapter {
   }
 
   load () {
-    if (!Array.isArray(Bot.wsf[this.path])) { Bot.wsf[this.path] = [] }
+    if (!Array.isArray(Bot.wsf[this.path]))
+    { Bot.wsf[this.path] = [] }
     Bot.wsf[this.path].push((ws, ...args) =>
       ws.on("message", data => this.message(data, ws, ...args))
     )

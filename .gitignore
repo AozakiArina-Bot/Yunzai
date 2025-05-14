@@ -5,3 +5,11 @@ node_modules
 temp
 dump.rdb
 pnpm-lock.yaml
+
+
+  lib/plugins/stdin.js
+   plugins/other/restart.js 
+   lib/tools/docker.sh
+   lib/listener/loader.js 
+   package.json 
+   plugins/adapter/

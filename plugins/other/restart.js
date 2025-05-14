@@ -64,36 +64,31 @@ export class Restart extends plugin {
       reply: msg => Bot.sendMasterMsg(msg),
       isMaster: true
     }
-    if (cfg.bot.restart_time) { setTimeout(this.restart.bind(this), cfg.bot.restart_time * 60000) }
+    if (cfg.bot.restart_time)
+    { setTimeout(this.restart.bind(this), cfg.bot.restart_time * 60000) }
 
     this.task = []
-    if (cfg.bot.restart_cron) {
-      for (const i of Array.isArray(cfg.bot.restart_cron) ? cfg.bot.restart_cron : [cfg.bot.restart_cron]) {
-        this.task.push({
-          name: "定时重启",
-          cron: i,
-          fnc: this.restart.bind(this)
-        })
-      }
-    }
-    if (cfg.bot.stop_cron) {
-      for (const i of Array.isArray(cfg.bot.stop_cron) ? cfg.bot.stop_cron : [cfg.bot.stop_cron]) {
-        this.task.push({
-          name: "定时关机",
-          cron: i,
-          fnc: this.stop.bind(this)
-        })
-      }
-    }
-    if (cfg.bot.start_cron) {
-      for (const i of Array.isArray(cfg.bot.start_cron) ? cfg.bot.start_cron : [cfg.bot.start_cron]) {
-        this.task.push({
-          name: "定时开机",
-          cron: i,
-          fnc: () => new Start(this.e).start()
-        })
-      }
-    }
+    if (cfg.bot.restart_cron)
+    { for (const i of Array.isArray(cfg.bot.restart_cron) ? cfg.bot.restart_cron : [cfg.bot.restart_cron])
+    { this.task.push({
+      name: "定时重启",
+      cron: i,
+      fnc: this.restart.bind(this)
+    }) } }
+    if (cfg.bot.stop_cron)
+    { for (const i of Array.isArray(cfg.bot.stop_cron) ? cfg.bot.stop_cron : [cfg.bot.stop_cron])
+    { this.task.push({
+      name: "定时关机",
+      cron: i,
+      fnc: this.stop.bind(this)
+    }) } }
+    if (cfg.bot.start_cron)
+    { for (const i of Array.isArray(cfg.bot.start_cron) ? cfg.bot.start_cron : [cfg.bot.start_cron])
+    { this.task.push({
+      name: "定时开机",
+      cron: i,
+      fnc: () => new Start(this.e).start()
+    }) } }
   }
 
   async restartMsg () {
@@ -101,22 +96,28 @@ export class Restart extends plugin {
     if (!restart) return
     await redis.del(this.key)
     restart = JSON.parse(restart)
-    if (restart.isStop) { return this.stop(restart.time) }
+    if (restart.isStop)
+    { return this.stop(restart.time) }
 
     const time = Bot.getTimeDiff(restart.time)
     const msg = [restart.isExit ? `开机成功，距离上次停止${time}` : `重启成功，用时${time}`]
-    if (restart.msg_id) { msg.unshift(segment.reply(restart.msg_id)) }
+    if (restart.msg_id)
+    { msg.unshift(segment.reply(restart.msg_id)) }
 
-    if (restart.group_id) { await Bot.sendGroupMsg(restart.bot_id, restart.group_id, msg) } else if (restart.user_id) { await Bot.sendFriendMsg(restart.bot_id, restart.user_id, msg) } else { await Bot.sendMasterMsg(msg) }
+    if (restart.group_id)
+    { await Bot.sendGroupMsg(restart.bot_id, restart.group_id, msg) }
+    else if (restart.user_id)
+    { await Bot.sendFriendMsg(restart.bot_id, restart.user_id, msg) }
+    else
+    { await Bot.sendMasterMsg(msg) }
   }
 
   async set (isExit) {
-    if (temp.priority) {
-      return redis.set(this.key, JSON.stringify({
-        isStop: true,
-        time: temp.stop_time
-      }))
-    }
+    if (temp.priority)
+    { return redis.set(this.key, JSON.stringify({
+      isStop: true,
+      time: temp.stop_time
+    })) }
     await this.reply(`开始${isExit ? "停止" : "重启"}，本次运行时长${Bot.getTimeDiff()}`)
     return redis.set(this.key, JSON.stringify({
       isExit,
@@ -130,12 +131,8 @@ export class Restart extends plugin {
 
   async restart () {
     await this.set()
-    if (process.env.app_type === "pm2") {
-      const ret = await Bot.exec("pnpm run restart")
-      if (!ret.error) process.exit()
-      await this.reply(`重启错误\n${ret.error}\n${ret.stdout}\n${ret.stderr}`)
-      Bot.makeLog("error", ["重启错误", ret])
-    } else process.exit()
+    const ret = await Bot.restart()
+    await this.reply(`重启错误\n${Bot.String(ret)}}`)
   }
 
   async stop (time) {
@@ -149,10 +146,7 @@ export class Restart extends plugin {
 
   async exit () {
     await this.set(true)
-    if (process.env.app_type === "pm2") {
-      const ret = await Bot.exec("pnpm stop")
-      await this.reply(`停止错误\n${ret.error}\n${ret.stdout}\n${ret.stderr}`)
-      Bot.makeLog("error", ["停止错误", ret])
-    } else process.exit(1)
+    const ret = await Bot.exit()
+    await this.reply(`停止错误\n${Bot.String(ret)}`)
   }
 }

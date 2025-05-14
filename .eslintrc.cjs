@@ -54,6 +54,9 @@ module.exports = {
     "no-cond-assign": "off", // 禁用 "禁止在条件语句中使用赋值操作" 的规则
     "brace-style": "off", // 禁用 "强制大括号风格" 的规则
     "no-fallthrough": "off", // 禁用 "禁止在 switch 语句中使用 fall-through" 的规则
-    "no-control-regex": "off" // 禁用 "禁止使用控制字符" 的规则
+    "no-control-regex": "off", // 禁用 "禁止使用控制字符" 的规则
+    "no-use-before-define": "off", // 禁用 "禁止在变量定义之前使用它们" 的规则
+    "no-mixed-operators": "off", // 禁用 "禁止混合使用不同的运算符" 的规则
+    "no-unsafe-finally": "off" // 禁用 "禁止在 finally 中使用 return、throw、break 或 continue" 的规则
   }
 }

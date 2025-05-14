@@ -14,9 +14,11 @@ Bot.adapter.push(new class stdinAdapter {
   )
 
   async sendMsg (msg) {
-    if (!Array.isArray(msg)) { msg = [msg] }
+    if (!Array.isArray(msg))
+    { msg = [msg] }
     for (let i of msg) {
-      if (typeof i != "object") { i = { type: "text", text: i } }
+      if (typeof i != "object")
+      { i = { type: "text", text: i } }
 
       let file
       if (i.file) {
@@ -30,7 +32,8 @@ Bot.adapter.push(new class stdinAdapter {
 
       switch (i.type) {
         case "text":
-          if (i.text.match("\n")) { i.text = `发送文本: \n${i.text}` }
+          if (i.text.match("\n"))
+          { i.text = `发送文本: \n${i.text}` }
           Bot.makeLog("info", i.text, this.id)
           break
         case "image":
@@ -103,7 +106,7 @@ Bot.adapter.push(new class stdinAdapter {
         input: process.stdin,
         output: process.stderr
       }).on("line", data => this.message(String(data)))
-        .on("close", () => process.exit(1)),
+        .on("close", Bot.exit.bind(Bot, 5)),
 
       uin: this.id,
       nickname: this.name,

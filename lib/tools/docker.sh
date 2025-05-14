@@ -1,5 +1,5 @@
 #TRSS Yunzai Docker 安装脚本 作者：时雨🌌星空
-NAME=v1.0.0 VERSION=202408090
+NAME=v1.0.0 VERSION=202504180
 R="[1;31m" G="[1;32m" Y="[1;33m" C="[1;36m" B="[1;m" O="[m"
 echo "$B———————————————————————————
 $R TRSS$Y Yunzai$G Docker$C Script$O
@@ -72,10 +72,10 @@ echo "FROM $DKURL"'/library/node:slim
 RUN sed -i "s|deb.debian.org|'"$APTURL"'|g" /etc/apt/sources.list.d/debian.sources\
  && apt update\
  && apt install -y ca-certificates\
- && sed -i "s|http://'"$APTURL"'|https://'"$APTURL"'|g" /etc/apt/sources.list.d/debian.sources\
+ && sed -i "s|http://'"$APTURL"'|https://'"$APTURL"'|;s|bookworm-updates|bookworm-updates bookworm-backports|" /etc/apt/sources.list.d/debian.sources\
  && apt update\
  && apt full-upgrade -y\
- && apt install -y curl git redis-server '"$APTDEP"'\
+ && apt install -y curl git valkey-server '"$APTDEP"'\
  && apt autoremove --purge\
  && apt clean\
  && git config --global --add safe.directory "*"\
