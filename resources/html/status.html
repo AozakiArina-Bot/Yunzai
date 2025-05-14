@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yunzai Status Report</title>
+    <style>
+        @font-face {
+            font-family: "SR";
+            src: url("{{ResPath }}SR.ttf");
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: "SR";
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #4a90e2;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 2px solid #4a90e2;
+            padding-bottom: 5px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: #f4f4f9;
+        }
+        .highlight {
+            background-color: #e7f3ff;
+        }
+
+        .plugin {
+            font-size: 12px;
+            font-family: "SR";
+            text-align: center;
+            color: #7994a7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="report-container">
+        <h1>Yunzai Status Report</h1>
+    </div>
+    <div class="plugin">Design by  Aozaki Arina</div>
+    <script>
+        const msg = {{@ msg}}
+        function createSection(title, data) {
+            const section = document.createElement('div');
+            section.className = 'section';
+            const header = document.createElement('h2');
+            header.textContent = title;
+            section.appendChild(header);
+
+            if (Array.isArray(data)) {
+                const table = document.createElement('table');
+                table.className = 'data-table';
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                const headers = title === '账号在线时长' ? ['账号', '在线时间'] : ['日期', '收', '发'];
+                headers.forEach(text => {
+                    const th = document.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    if (item.date === '总计' || item.time === '总计') row.className = 'highlight';
+                    
+                    const keys = title === '账号在线时长' ? ['id', 'time'] : ['date', 'receive', 'send'];
+                    keys.forEach(key => {
+                        const td = document.createElement('td');
+                        td.textContent = item[key];
+                        row.appendChild(td);
+                    });
+                    tbody.appendChild(row);
+                });
+                table.appendChild(tbody);
+                section.appendChild(table);
+            } else {
+                for (const [key, value] of Object.entries(data)) {
+                    const p = document.createElement('p');
+                    p.textContent = `${key}：${value}`;
+                    section.appendChild(p);
+                }
+            }
+
+            return section;
+        }
+
+        const container = document.getElementById('report-container');
+        for (const [title, data] of Object.entries(msg)) {
+            container.appendChild(createSection(title, data));
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+apps:
+  - name: Yunzai
+    script: ./app.js
+    max_memory_restart: 8G
+    exp_backoff_restart_delay: 1000
+    env:
+      app_type: pm2

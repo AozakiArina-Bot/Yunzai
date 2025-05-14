@@ -1,0 +1,8 @@
+*
+!.gitignore
+!adapter
+!adapter/**
+!system
+!system/**
+!other
+!other/**

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账号违规记录</title>
+    <style>
+@font-face {
+  font-family: "SR";
+  src: url("{{ResPath }}SR.ttf");
+  font-weight: normal;
+  font-style: normal;
+  }
+   body {
+       font-family: "SR";
+       background-color: #f4f4f9;
+       margin: 20px;
+   }
+
+   .container {
+       max-width: 800px;
+       margin: auto;
+       background: white;
+       padding: 20px;
+       border-radius: 10px;
+       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+   }
+
+   .user-info {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.title {
+  margin-top: 10px;
+}
+
+.header {
+  margin-top: 10px;
+}
+
+.role-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  line-height: 40px;
+  margin-left: 20px;
+  background-size: cover;
+  background-color: #f8f1e1;
+  background-position: center;
+  border: 2px solid white;
+}
+
+.role-text {
+  margin-left: 10px;
+  width:250px
+}
+
+.role-text p {
+  margin: 5px 0;
+}
+
+.role-text span {
+  font-size: 10px;
+  background-color: rgb(234, 182, 26);
+  padding: 3px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+
+   h2 {
+       text-align: center;
+       color: #333;
+   }
+
+   .violation {
+       padding: 15px;
+       margin-bottom: 15px;
+       border-radius: 8px;
+       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+       transition: transform 0.2s ease-in-out;
+   }
+
+   .violation:hover {
+       transform: scale(1.02);
+   }
+
+   .severe { background: #ffebee; border-left: 5px solid #d32f2f; } /* 严重违规 */
+   .moderate { background: #fff3e0; border-left: 5px solid #ff9800; } /* 中等违规 */
+   .mild { background: #e3f2fd; border-left: 5px solid #1976d2; } /* 轻微违规 */
+
+   .violation p {
+       margin: 5px 0;
+       color: #333;
+   }
+
+   .violation strong {
+       color: #000;
+   }
+
+   .plugin {
+   font-size: 12px;
+   font-family: "SR";
+   text-align: center;
+   color: #7994a7;
+   }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📜 账号违规记录</h2>
+
+    <div class="user-info">
+        <div class="role-image" style="background-image: url('https://q1.qlogo.cn/g?b=qq&nk={{account}}&s=640')"></div>
+        <div class="role-text">
+          <p>账号：{{account}}</p>
+          <p>违规记录数：{{totalRecords}} 条</p>
+
+        </div>
+      </div>
+
+    {{each msgList msg}}
+    <div class="violation {{msg.severity}}">
+        <p><strong>冻结时间：</strong>{{msg.time}}</p>
+        <p><strong>冻结原因：</strong>{{msg.reason}}</p>
+        <p><strong>冻结详情：</strong>{{msg.details}}</p>
+    </div>
+    {{/each}}
+
+</div>
+<div class="plugin">Design by  Aozaki Arina</div>
+</body>
+</html>

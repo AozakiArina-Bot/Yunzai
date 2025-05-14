@@ -1,0 +1,63 @@
+# 日志等级 trace,debug,info,warn,fatal,mark,error,off
+log_level: info
+# 单条日志长度
+log_length: 10000
+# 对象日志格式
+log_object: true
+# 日志ID对齐
+log_align: "  Yunzai  "
+# 插件加载超时
+plugin_load_timeout: 60
+# 监听文件变化
+file_watch: true
+
+# 自动更新时间
+update_time: 1440
+# 自动重启时间
+restart_time: 0
+# 定时更新cron表达式
+update_cron:
+# 定时重启cron表达式
+restart_cron:
+# 定时关机cron表达式
+stop_cron:
+# 定时开机cron表达式
+start_cron:
+
+# 上线推送通知的冷却时间
+online_msg_exp: 1440
+# 文件保存时间
+file_to_url_time: 1
+# 文件访问次数
+file_to_url_times:
+# 消息类型统计
+msg_type_count: false
+# 以/开头转为#
+/→#: true
+
+# chromium其他路径
+chromium_path:
+# puppeteer接口地址
+puppeteer_ws:
+# puppeteer截图超时时间
+puppeteer_timeout:
+
+# 是否使用Karin Puppeteer
+karin_puppeteer: false
+# Karin Puppeteer 地址
+karin_puppeteer_ws: http://127.0.0.1:7005/puppeteer
+# 是否全是静态资源
+karin_puppeteer_static: true
+# Karin Puppeteer 截图超时时间
+karin_puppeteer_timeout: 120
+# Karin Puppeteer 授权
+karin_puppeteer_authorization: 123456
+
+# 米游社接口代理地址，国际服用
+proxyAddress:
+
+#日志最大显示条数
+line: 50
+
+#日志最大显示字符
+length: 1000
