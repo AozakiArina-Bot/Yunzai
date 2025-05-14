@@ -7,26 +7,27 @@
     <style>
 @font-face {
   font-family: "SR";
-  src: url("{{ResPath }}SR.ttf");
+  src: url("{{ResPath}}SR.ttf");
   font-weight: normal;
   font-style: normal;
-  }
-   body {
-       font-family: "SR";
-       background-color: #f4f4f9;
-       margin: 20px;
-   }
+}
 
-   .container {
-       max-width: 800px;
-       margin: auto;
-       background: white;
-       padding: 20px;
-       border-radius: 10px;
-       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-   }
+body {
+  font-family: "SR";
+  background-color: #f4f4f9;
+  margin: 20px;
+}
 
-   .user-info {
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
   display: flex;
   align-items: center;
   margin-top: 20px;
@@ -55,7 +56,7 @@
 
 .role-text {
   margin-left: 10px;
-  width:250px
+  width: 250px
 }
 
 .role-text p {
@@ -70,42 +71,57 @@
   margin-left: 5px;
 }
 
-   h2 {
-       text-align: center;
-       color: #333;
-   }
+h2 {
+  text-align: center;
+  color: #333;
+}
 
-   .violation {
-       padding: 15px;
-       margin-bottom: 15px;
-       border-radius: 8px;
-       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-       transition: transform 0.2s ease-in-out;
-   }
+.violation {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
 
-   .violation:hover {
-       transform: scale(1.02);
-   }
+.violation:hover {
+  transform: scale(1.02);
+}
 
-   .severe { background: #ffebee; border-left: 5px solid #d32f2f; } /* 严重违规 */
-   .moderate { background: #fff3e0; border-left: 5px solid #ff9800; } /* 中等违规 */
-   .mild { background: #e3f2fd; border-left: 5px solid #1976d2; } /* 轻微违规 */
+.severe {
+  background: #ffebee;
+  border-left: 5px solid #d32f2f;
+}
 
-   .violation p {
-       margin: 5px 0;
-       color: #333;
-   }
+/* 严重违规 */
+.moderate {
+  background: #fff3e0;
+  border-left: 5px solid #ff9800;
+}
 
-   .violation strong {
-       color: #000;
-   }
+/* 中等违规 */
+.mild {
+  background: #e3f2fd;
+  border-left: 5px solid #1976d2;
+}
 
-   .plugin {
-   font-size: 12px;
-   font-family: "SR";
-   text-align: center;
-   color: #7994a7;
-   }
+/* 轻微违规 */
+
+.violation p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.violation strong {
+  color: #000;
+}
+
+.plugin {
+  font-size: 12px;
+  font-family: "SR";
+  text-align: center;
+  color: #7994a7;
+}
     </style>
 </head>
 <body>

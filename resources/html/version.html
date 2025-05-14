@@ -5,99 +5,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title></title>
   <style>
-    body {
-      font-family: "SR";
-      src: url("{{ResPath }}SR.ttf");
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 2rem;
-    }
+@font-face {
+  font-family: "SR";
+  src: url("{{ResPath}}SR.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
 
-    .container {
-      font-family: "SR";
-      max-width: 800px;
-      margin: auto;
-    }
+body {
+  font-family: "SR";
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 2rem;
+}
 
-    h1 {
-      font-family: "SR";
-      text-align: center;
-      color: #34495e;
-      margin-bottom: 2rem;
-    }
+.container {
+  font-family: "SR";
+  max-width: 800px;
+  margin: auto;
+}
 
-    .card {
-      font-family: "SR";
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      padding: 20px 24px;
-      border-left: 6px solid #2980b9;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+h1 {
+  font-family: "SR";
+  text-align: center;
+  color: #34495e;
+  margin-bottom: 2rem;
+}
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-    }
+.card {
+  font-family: "SR";
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  border-left: 6px solid #2980b9;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-    .card-header {
-      font-family: "SR";
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #2c3e50;
-      margin-bottom: 8px;
-    }
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
 
-    .card-subtitle {
-      font-family: "SR";
-      font-size: 0.9rem;
-      color: #7f8c8d;
-      margin-bottom: 10px;
-    }
+.card-header {
+  font-family: "SR";
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
 
-    .card-footer {
-      font-family: "SR";
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: #555;
-    }
+.card-subtitle {
+  font-family: "SR";
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
 
-    .tag {
-      font-family: "SR";
-      padding: 4px 10px;
-      border-radius: 6px;
-      background-color: #ecf0f1;
-    }
+.card-footer {
+  font-family: "SR";
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #555;
+}
 
-    .tag.green {
-      background-color: #2ecc71;
-      color: #fff;
-      font-weight: bold;
-    }
+.tag {
+  font-family: "SR";
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: #ecf0f1;
+}
 
-    .tag.red {
-      background-color: #e74c3c;
-      color: #fff;
-      font-weight: bold;
-    }
+.tag.green {
+  background-color: #2ecc71;
+  color: #fff;
+  font-weight: bold;
+}
 
-    .tag.gray {
-      background-color: #bdc3c7;
-      color: #2c3e50;
-    }
+.tag.red {
+  background-color: #e74c3c;
+  color: #fff;
+  font-weight: bold;
+}
 
-    .commit-id {
-      font-family: "SR";
-      background-color: #f1f2f6;
-      padding: 3px 7px;
-      border-radius: 6px;
-      font-family: monospace;
-    }
+.tag.gray {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}
+
+.commit-id {
+  font-family: "SR";
+  background-color: #f1f2f6;
+  padding: 3px 7px;
+  border-radius: 6px;
+}
   </style>
 </head>
 <body>
