@@ -165,6 +165,9 @@ export default class Puppeteer extends Renderer {
     const savePath = this.dealTpl(name, data)
     if (!savePath) return false
 
+    // 获取HTML文件名
+    const htmlFileName = name + ("/") + savePath.split("/").pop()
+
     let buff = ""
     const start = Date.now()
 
@@ -174,10 +177,9 @@ export default class Puppeteer extends Renderer {
     const puppeteerTimeout = this.puppeteerTimeout
     let overtime
     if (puppeteerTimeout > 0) {
-      // TODO 截图超时处理
       overtime = setTimeout(() => {
         if (this.shoting.length) {
-          logger.error(`[图片生成][${name}] 截图超时，当前等待队列：${this.shoting.join(",")}`)
+          logger.error(`[图片生成][${htmlFileName}] 截图超时，当前等待队列：${this.shoting.join(",")}`)
           this.restart(true)
           this.shoting = []
         }
@@ -216,7 +218,7 @@ export default class Puppeteer extends Renderer {
         this.renderNum++
         /** 计算图片大小 */
         const kb = (buff.length / 1024).toFixed(2) + "KB"
-        logger.mark(`[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`)
+        logger.mark(`[图片生成][${logger.green(htmlFileName)}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`)
         ret.push(buff)
       } else {
         // 分片截图
@@ -245,16 +247,16 @@ export default class Puppeteer extends Renderer {
 
           /** 计算图片大小 */
           const kb = (buff.length / 1024).toFixed(2) + "KB"
-          logger.mark(`[图片生成][${name}][${i}/${num}] ${kb}`)
+          logger.mark(`[图片生成][${logger.green(htmlFileName)}][${i}/${num}] ${kb}`)
           ret.push(buff)
         }
         if (num > 1) {
-          logger.mark(`[图片生成][${name}] 处理完成`)
+          logger.mark(`[图片生成][${logger.green(htmlFileName)}] 处理完成`)
         }
       }
       page.close().catch(err => logger.error(err))
     } catch (err) {
-      logger.error(`[图片生成][${name}] 图片生成失败`, err)
+      logger.error(`[图片生成][${htmlFileName}] 图片生成失败`, err)
       /** 关闭浏览器 */
       this.restart(true)
       if (overtime) clearTimeout(overtime)
@@ -267,7 +269,7 @@ export default class Puppeteer extends Renderer {
     this.shoting.pop()
 
     if (ret.length === 0 || !ret[0]) {
-      logger.error(`[图片生成][${name}] 图片生成为空`)
+      logger.error(`[图片生成][${htmlFileName}] 图片生成为空`)
       return false
     }
 

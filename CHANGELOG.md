@@ -1,5 +1,7 @@
 # 3.1.7
 
+* 🦄 refactor:优化日志信息新增文件名显示
+* ✨ feat(回退版本): 回退插件版本`#回退miao3`回退miao三个版本`**@Aozaki Arina**
 * ✨ feat(删除日志): 日志文件超过`7天`自动删除`**@Aozaki Arina**
 
 # 3.1.6
