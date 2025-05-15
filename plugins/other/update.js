@@ -142,15 +142,31 @@ export class update extends plugin {
       await this.reply(`开始${type} ${this.typeName}`)
     }
 
-    const ret = await Promise.race([this.exec(cm, plugin)])
+    // 添加超时处理
+    const execPromise = this.exec(cm, plugin)
+    const timeoutPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ timeout: true })
+      }, 15000) // 15秒超时
+    })
+
+    const ret = await Promise.race([execPromise, timeoutPromise])
+
+    // 如果是超时，先检查实际的git操作结果
+    if (ret.timeout) {
+      const actualRet = await execPromise
+      // 如果实际操作有错误，优先使用实际错误
+      if (actualRet.error) {
+        return await this.gitErr(plugin, actualRet.stdout, actualRet.error.message)
+      }
+      // 如果实际操作成功，就不当作超时处理
+      ret.stdout = actualRet.stdout
+      ret.error = null
+    }
 
     if (ret.error) {
       logger.mark(`${this.e.logFnc} 更新失败 ${this.typeName}`)
-      this.errorResults.push({
-        plugin: this.typeName,
-        error: `${this.typeName} 更新失败\n${ret.error.message}`
-      })
-      return false
+      return await this.gitErr(plugin, ret.stdout, ret.error.message)
     }
 
     // 增强依赖更新检测
