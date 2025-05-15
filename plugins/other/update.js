@@ -28,6 +28,11 @@ export class update extends plugin {
           reg: "^#全部(安?静)?(强制)?更新$",
           fnc: "updateAll",
           permission: "master"
+        },
+        {
+          reg: "^#回退.*?\\d+$",
+          fnc: "rollback",
+          permission: "master"
         }
       ]
     })
@@ -47,7 +52,10 @@ export class update extends plugin {
       isMaster: true,
       logFnc: "[自动更新]",
       msg: "#全部静更新",
-      reply: msg => Bot.sendMasterMsg(msg)
+      reply: (msg) => Bot.sendMasterMsg(msg)
+    }
+    if (cfg.bot.update_time) {
+      this.autoUpdate()
     }
     if (cfg.bot.update_time) { this.autoUpdate() }
 
@@ -64,9 +72,7 @@ export class update extends plugin {
   }
 
   autoUpdate () {
-    setTimeout(() =>
-      this.updateAll().finally(this.autoUpdate.bind(this))
-    , cfg.bot.update_time * 60000)
+    setTimeout(() => this.updateAll().finally(this.autoUpdate.bind(this)), cfg.bot.update_time * 60000)
   }
 
   async update () {
@@ -123,31 +129,26 @@ export class update extends plugin {
     let type = "更新"
     if (!plugin) cm = `git checkout package.json && ${cm}`
 
+    // 在执行强制更新前保存当前的 commit ID
+    this.oldCommitId = await this.getCommitId(plugin)
+
     if (this.e.msg.includes("强制")) {
       type = "强制更新"
       cm = `git reset --hard ${await this.getRemoteBranch(true, plugin)} && git pull --rebase`
     }
-    this.oldCommitId = await this.getCommitId(plugin)
 
     logger.mark(`${this.e.logFnc} 开始${type} ${this.typeName}`)
     if (!this.quiet) {
       await this.reply(`开始${type} ${this.typeName}`)
     }
 
-    // 添加超时处理
-    const timeout = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ error: { message: "更新超时" } })
-      }, 15000) // 30秒超时
-    })
-
-    const ret = await Promise.race([this.exec(cm, plugin), timeout])
+    const ret = await Promise.race([this.exec(cm, plugin)])
 
     if (ret.error) {
       logger.mark(`${this.e.logFnc} 更新失败 ${this.typeName}`)
       this.errorResults.push({
         plugin: this.typeName,
-        error: ret.error.message === "更新超时" ? `${this.typeName} 更新超时，已跳过` : `${this.typeName} 更新失败，未知错误`
+        error: `${this.typeName} 更新失败\n${ret.error.message}`
       })
       return false
     }
@@ -155,7 +156,9 @@ export class update extends plugin {
     // 增强依赖更新检测
     const time = await this.getTime(plugin)
     if (/Already up|已经是最新/.test(ret.stdout)) {
-      if (!this.quiet) { this.updateResults.push(`${this.typeName} 已是最新\n最后更新时间：${time}`) }
+      if (!this.quiet) {
+        this.updateResults.push(`${this.typeName} 已是最新\n最后更新时间：${time}`)
+      }
     } else {
       this.isUp = true
       if (/package(?:-lock)?\.json|pnpm-lock\.yaml/.test(ret.stdout)) {
@@ -203,13 +206,86 @@ export class update extends plugin {
     for (const i of ret.stdout.match(/remote\..*?\.url=.+/g) || []) {
       const branch = i.replace(/remote\.(.*?)\.url=.+/g, "$1")
       const url = i.replace(/remote\..*?\.url=/g, "")
-      urls[branch] = (hide ? url.replace(/\/\/([^@]+)@/, "//") : url)
+      urls[branch] = hide ? url.replace(/\/\/([^@]+)@/, "//") : url
     }
     return urls
   }
 
   gitErrUrl (error) {
     return error.match(/'(.+?)'/g)[0].replace(/'(.+?)'/, "$1")
+  }
+
+  async rollback () {
+    if (!this.e.isMaster) return false
+    if (uping) {
+      await this.reply("正在更新，请稍候再试")
+      return false
+    }
+
+    // 解析回退版本数
+    const match = this.e.msg.match(/回退(.*?)(\d+)$/)
+    if (!match) {
+      await this.reply("格式错误，请使用 #回退插件名称数字 例如：#回退Yunzai3")
+      return false
+    }
+
+    const plugin = await this.getPlugin(match[1])
+    if (plugin === false && match[1]) {
+      await this.reply("未找到该插件")
+      return false
+    }
+
+    const steps = parseInt(match[2])
+    if (steps <= 0 || steps > 50) {
+      await this.reply("回退版本数必须在1-50之间")
+      return false
+    }
+
+    uping = true
+    this.updateResults = []
+    this.errorResults = []
+
+    // 获取当前commit用于记录
+    const currentCommit = await this.getCommitId(plugin)
+
+    // 先执行 fetch --unshallow 获取完整历史
+    await this.exec("git fetch --unshallow origin", plugin)
+
+    // 执行回退
+    const cmd = `git reset --hard HEAD~${steps}`
+    logger.mark(`${this.e.logFnc} 开始回退 ${this.typeName} ${steps}个版本`)
+    if (!this.quiet) {
+      await this.reply(`开始回退 ${this.typeName} ${steps}个版本`)
+    }
+
+    const ret = await this.exec(cmd, plugin)
+
+    if (ret.error) {
+      logger.mark(`${this.e.logFnc} 回退失败 ${this.typeName}`)
+      this.errorResults.push({
+        plugin: this.typeName,
+        error: `${this.typeName} 回退失败\n${ret.error.message}`
+      })
+      await this.e.reply(this.errorResults[0].error)
+      uping = false
+      return false
+    }
+
+    // 获取回退后的日志
+    const time = await this.getTime(plugin)
+    const latestCommit = await this.exec("git log -1 --pretty=\"[%cd] %s\" --date=format:\"%F %T\"", plugin)
+    this.updateResults.push(`${this.typeName} 已回退${steps}个版本\n当前版本时间：${time}\n当前最新记录：${latestCommit.stdout}`)
+    await this.e.reply(this.updateResults[0])
+
+    // 获取回退日志
+    this.oldCommitId = currentCommit
+    const log = await this.getLog(plugin)
+    if (log) await this.e.reply(log)
+
+    if (this.isPkgUp) await this.updatePackage()
+    if (this.isUp) this.restart()
+    uping = false
+    return true
   }
 
   async gitErr (plugin, stdout, error) {
@@ -266,11 +342,13 @@ export class update extends plugin {
       }
     }
     if (allLogs.length > 0) {
-      const summaryNodes = [{
-        user_id: "80000000",
-        nickname: "更新日志汇总",
-        message: `共更新了 ${allLogs.length} 个插件`
-      }]
+      const summaryNodes = [
+        {
+          user_id: "80000000",
+          nickname: "更新日志汇总",
+          message: `共更新了 ${allLogs.length} 个插件`
+        }
+      ]
 
       for (const item of allLogs) {
         // 这里不应该重新获取日志，而是直接使用已经保存的日志
@@ -286,11 +364,13 @@ export class update extends plugin {
 
     // 在所有更新完成后，如果有错误信息，添加到合并转发消息中
     if (this.errorResults.length > 0) {
-      const errorNodes = [{
-        user_id: "80000000",
-        nickname: "更新错误汇总",
-        message: `共有 ${this.errorResults.length} 个插件更新失败`
-      }]
+      const errorNodes = [
+        {
+          user_id: "80000000",
+          nickname: "更新错误汇总",
+          message: `共有 ${this.errorResults.length} 个插件更新失败`
+        }
+      ]
 
       for (const error of this.errorResults) {
         errorNodes.push({
@@ -311,7 +391,9 @@ export class update extends plugin {
 
   async updatePackage () {
     const cmd = "pnpm install"
-    if (process.platform === "win32") { return this.reply(`检测到依赖更新，请 #关机 后执行 ${cmd}`) }
+    if (process.platform === "win32") {
+      return this.reply(`检测到依赖更新，请 #关机 后执行 ${cmd}`)
+    }
     await this.reply("开始更新依赖")
     return this.exec(cmd)
   }
@@ -325,28 +407,31 @@ export class update extends plugin {
     if (cm.error) return this.reply(cm.error.message)
     const logAll = cm.stdout.split("\n")
     if (!logAll.length) return false
+
     let log = []
-    for (let str of logAll) {
-      str = str.split("||")
-      if (str[0] === this.oldCommitId) break
-      if (str[1].includes("Merge branch")) continue
-      log.push(str[1])
+    if (this.e.msg.includes("强制")) {
+      // 强制更新时获取最近的更新记录
+      for (let str of logAll) {
+        str = str.split("||")
+        if (str[1].includes("Merge branch")) continue
+        log.push(str[1])
+      }
+    } else {
+      // 普通更新时使用 oldCommitId 作为截止点
+      for (let str of logAll) {
+        str = str.split("||")
+        if (str[0] === this.oldCommitId) break
+        if (str[1].includes("Merge branch")) continue
+        log.push(str[1])
+      }
     }
+
     if (log.length <= 0) return false
 
-    const forwardNodes = [{
-      user_id: "80000000",
-      nickname: plugin || "Yunzai",
-      message: `${plugin || "Yunzai"} 更新日志，共${log.length}条`
-    }]
-
-    forwardNodes.push({
-      user_id: "80000000",
-      nickname: "更新详情",
-      message: log.join("\n\n")
-    })
-
-    return Bot.makeForwardMsg(forwardNodes)
+    const msg = [`${plugin || "Yunzai"} 更新日志，共${log.length}条`, log.join("\n\n")]
+    const end = await this.getRemoteUrl((await this.getRemoteBranch(false, plugin)).remote, true, plugin)
+    if (end) msg.push(end)
+    return Bot.makeForwardArray(msg)
   }
 
   async getLogAsJson (plugin = "") {
@@ -381,8 +466,6 @@ export class update extends plugin {
         })
       }
     }
-
-    const end = await this.getRemoteUrl((await this.getRemoteBranch(false, plugin)).remote, true, plugin)
     return {
       plugin: plugin || "Yunzai",
       totalLogs: logs.length,
