@@ -1,5 +1,3 @@
-<div align="center">
-
 # 说明
 
 此仓库为个人fork版本自用
@@ -23,6 +21,10 @@ git remote set-url origin https://用户名:访问令牌@github.com/AozakiArina-
 git fetch origin master
 git reset --hard origin/master
 ```
+
+以下为原版仓库说明
+
+<div align="center">
 
 # TRSS-Yunzai
 
