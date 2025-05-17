@@ -1,5 +1,29 @@
 <div align="center">
 
+# 说明
+
+此仓库为个人fork版本自用
+
+## 安装
+
+项目右上角clone选择ssh生成秘钥
+
+```
+git clone --depth=1 git@github.com:AozakiArina-Bot/Yunzai.git
+```
+
+个人设置 -> 访问令牌 -> 新建访问令牌
+```
+git clone --depth=1 https://用户名:访问令牌@github.com/AozakiArina-Bot/Yunzai.git
+```
+
+换源
+```
+git remote set-url origin https://用户名:访问令牌@github.com/AozakiArina-Bot/Yunzai.git
+git fetch origin master
+git reset --hard origin/master
+```
+
 # TRSS-Yunzai
 
 Yunzai 应用端，支持多账号，支持协议端：OneBotv11、ComWeChat、GSUIDCore、ICQQ、QQBot、QQ频道、微信、KOOK、Telegram、Discord、OPQBot、Lagrange
