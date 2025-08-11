@@ -13,7 +13,13 @@ export class clearLogs extends plugin {
         name: "清理日志文件",
         cron: "0 0 0 * * *", // 每天0点执行
         fnc: () => this.clearLogs()
-      }
+      },
+      rule: [
+        {
+          reg: "^[#/]*清理日志$",
+          fnc: "clearLogs"
+        }
+      ]
     })
   }
 
