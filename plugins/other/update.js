@@ -241,7 +241,7 @@ export class update extends plugin {
     // 解析回退版本数
     const match = this.e.msg.match(/回退(.*?)(\d+)$/)
     if (!match) {
-      await this.reply("格式错误，请使用 #回退插件名称数字 例如：#回退Yunzai3")
+      await this.reply("格式错误，请使用 #回退插件名称数字 例如：#回退Yunzai3 或 #回退3（回退本体）")
       return false
     }
 
@@ -249,6 +249,11 @@ export class update extends plugin {
     if (plugin === false && match[1]) {
       await this.reply("未找到该插件")
       return false
+    }
+
+    // 如果没有指定插件名称，则回退本体
+    if (!match[1]) {
+      this.typeName = "Yunzai"
     }
 
     const steps = parseInt(match[2])
