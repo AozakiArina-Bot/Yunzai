@@ -51,7 +51,7 @@
 
 ## 📞 联系方式
 
-<div align="center">
+<div align="">
 
 🐧 **QQ**: [860563585](https://res.abeim.cn/api/qq/?qq=860563585)
 
