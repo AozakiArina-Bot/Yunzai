@@ -49,6 +49,14 @@
 - 保持与原版依赖兼容性
 - 不会随意修改核心依赖版本
 
+## 📞 联系方式
+
+<div align="center">
+
+🐧 **QQ**: [860563585](https://res.abeim.cn/api/qq/?qq=860563585)
+
+</div>
+
 ## 🎮 功能展示如以下有需要请看联系方式
 
 ### 原神仓库相关功能
@@ -63,13 +71,6 @@
 ### 状态监控
 <img src="./resources/img/state.png" width="100%" alt="状态监控">
 
-## 📞 联系方式
-
-<div align="center">
-
-🐧 **QQ**: [860563585](https://res.abeim.cn/api/qq/?qq=860563585)
-
-</div>
 
 ## 📝 其他仓库
 
