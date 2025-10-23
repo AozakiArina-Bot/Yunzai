@@ -64,17 +64,8 @@ export class Restart extends plugin {
       reply: msg => Bot.sendMasterMsg(msg),
       isMaster: true
     }
-    if (cfg.bot.restart_time)
-    { setTimeout(this.restart.bind(this), cfg.bot.restart_time * 60000) }
 
     this.task = []
-    if (cfg.bot.restart_cron)
-    { for (const i of Array.isArray(cfg.bot.restart_cron) ? cfg.bot.restart_cron : [cfg.bot.restart_cron])
-    { this.task.push({
-      name: "定时重启",
-      cron: i,
-      fnc: this.restart.bind(this)
-    }) } }
     if (cfg.bot.stop_cron)
     { for (const i of Array.isArray(cfg.bot.stop_cron) ? cfg.bot.stop_cron : [cfg.bot.stop_cron])
     { this.task.push({
