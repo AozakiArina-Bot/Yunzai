@@ -42,7 +42,10 @@ chromium_path:
 puppeteer_ws:
 # puppeteer截图超时时间
 puppeteer_timeout:
-
+# puppeteer渲染缩放数字越大清晰度越大
+puppeteer_deviceScaleFactor: 1
+# puppeteer截图质量
+puppeteer_quality: 100
 # 是否使用Karin Puppeteer
 karin_puppeteer: false
 # Karin Puppeteer 地址

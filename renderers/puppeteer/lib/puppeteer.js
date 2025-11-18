@@ -10,6 +10,7 @@ import moment from "moment"
 import cfg from "../../../lib/config/config.js"
 
 const _path = process.cwd()
+const DEFAULT_DEVICE_SCALE_FACTOR = 2
 // mac地址
 let mac = ""
 
@@ -188,6 +189,20 @@ export default class Puppeteer extends Renderer {
     try {
       const page = await this.browser.newPage()
       const pageGotoParams = lodash.extend(this.pageGotoParams, data.pageGotoParams || {})
+      const defaultViewport = await page.viewport()
+      const viewportCfg = data.viewport || {}
+      const deviceScaleFactor = cfg?.bot?.puppeteer_deviceScaleFactor || 1
+      const baseViewport = {
+        width: Math.ceil(viewportCfg.width || defaultViewport?.width || 1920),
+        height: Math.ceil(viewportCfg.height || defaultViewport?.height || pageHeight),
+        deviceScaleFactor
+      }
+      await page.setViewport(baseViewport)
+      await page.evaluate(dpr => {
+        try {
+          Object.defineProperty(window, "devicePixelRatio", { get: () => dpr })
+        } catch {}
+      }, deviceScaleFactor)
       await page.goto(`file://${_path}${lodash.trim(savePath, ".")}`, pageGotoParams)
       const body = (await page.$("#container")) || (await page.$("body"))
 
@@ -197,18 +212,17 @@ export default class Puppeteer extends Renderer {
       let num = 1
 
       const randData = {
-        type: data.imgType || "jpeg",
+        type: data.imgType || "png",
         omitBackground: data.omitBackground || false,
-        quality: data.quality || 90,
+        quality: data.quality || cfg?.bot?.puppeteer_quality || 100,
         path: data.path || ""
       }
 
       if (data.multiPage) {
-        randData.type = "jpeg"
         num = Math.round(boundingBox.height / pageHeight) || 1
       }
 
-      if (data.imgType === "png") delete randData.quality
+      if (randData.type === "png") delete randData.quality
 
       if (!data.multiPage) {
         buff = await body.screenshot(randData)
@@ -224,15 +238,17 @@ export default class Puppeteer extends Renderer {
         // 分片截图
         if (num > 1) {
           await page.setViewport({
-            width: boundingBox.width,
-            height: pageHeight + 100
+            width: Math.ceil(boundingBox.width),
+            height: pageHeight + 100,
+            deviceScaleFactor
           })
         }
         for (let i = 1; i <= num; i++) {
           if (i !== 1 && i === num)
           { await page.setViewport({
-            width: boundingBox.width,
-            height: parseInt(boundingBox.height) - pageHeight * (num - 1)
+            width: Math.ceil(boundingBox.width),
+            height: parseInt(boundingBox.height) - pageHeight * (num - 1),
+            deviceScaleFactor
           }) }
 
           if (i !== 1 && i <= num)
