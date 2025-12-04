@@ -31,6 +31,60 @@
    pnpm install
    ```
 
+## playwright渲染器
+
+### 安装步骤
+
+1. **安装 Playwright 依赖**
+   ```bash
+   # 使用 npm
+   npm install playwright
+   
+   # 或使用 pnpm
+   pnpm install playwright
+   ```
+
+2. **安装 Playwright 浏览器**
+   ```bash
+   # 安装 Chromium 浏览器（必需）
+   npx playwright install chromium
+   
+   # 或安装所有浏览器（可选）
+   npx playwright install
+   ```
+
+3. **配置渲染器**
+   
+   编辑 `config/config/renderer.yaml`，设置渲染器为 `playwright`：
+   ```yaml
+   # 渲染后端, 默认为 puppeteer
+   name: playwright
+   ```
+
+### 系统要求
+
+- **Windows**: 无需额外配置，直接安装即可
+- **Linux**: 可能需要安装系统依赖
+  ```bash
+  # Ubuntu/Debian
+  sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2
+  
+  # CentOS/RHEL
+  sudo yum install -y nss atk at-spi2-atk cups-libs libdrm libxkbcommon libXcomposite libXdamage libXfixes libXrandr mesa-libgbm alsa-lib
+  ```
+- **macOS**: 无需额外配置，直接安装即可
+
+### 功能特性
+
+- ✅ 支持高清晰度截图（可配置 `deviceScaleFactor`）
+- ✅ 支持多页截图（`multiPage`）
+
+### 注意事项
+
+- 首次安装需要下载 Chromium 浏览器（约 300MB），请确保网络畅通
+- 如果 Playwright 截图超时，系统会自动降级到 Puppeteer 渲染器
+- 建议在 `config/config/bot.yaml` 中配置 `puppeteer_deviceScaleFactor` 来调整清晰度
+
 ## ✨ 主要优化内容
 
 ### 🔧 功能增强
@@ -38,6 +92,7 @@
 - **图片优化** - 优化 404 和超时错误图片显示
 - **Puppeteer 集成** - 添加 karin-puppeteer 支持
 - **状态可视化** - 状态和日志改为图片形式展示
+- **playwright渲染器** - 支持playwright渲染器
 
 ### 🛠️ 系统优化
 - **自动备份** - 新增自动备份和定时清理功能
