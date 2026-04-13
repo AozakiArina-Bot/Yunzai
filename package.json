@@ -51,7 +51,6 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "better-sqlite3",
       "classic-level",
       "log4js",
       "puppeteer",
