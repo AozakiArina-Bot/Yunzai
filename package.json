@@ -34,7 +34,6 @@
     "node-schedule": "^2.1.1",
     "oicq": "link:lib/modules/oicq",
     "pm2": "^6.0.6",
-    "puppeteer": "^13.7.0",
     "sharp": "*",
     "playwright": "^1.49.0",
     "redis": "^4.7.1",
@@ -54,7 +53,6 @@
       "better-sqlite3",
       "classic-level",
       "log4js",
-      "puppeteer",
       "sqlite3",
       "sharp"
     ],

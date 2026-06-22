@@ -1,6 +1,6 @@
 import moment from "moment"
 import PluginsLoader from "../../lib/plugins/loader.js"
-import puppeteer from "../../lib/puppeteer/puppeteer.js"
+import renderer from "../../lib/renderer/loader.js"
 
 const _path = process.cwd() + "/resources/html"
 
@@ -52,7 +52,7 @@ export class status extends plugin {
       msg: JSON.stringify(result, null, 2)
     }
 
-    let img = await puppeteer.screenshot("status", html)
+    let img = await renderer.screenshot("status", html)
     if (img) await this.e.reply(img)
   }
 

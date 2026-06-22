@@ -57,7 +57,7 @@
    
    编辑 `config/config/renderer.yaml`，设置渲染器为 `playwright`：
    ```yaml
-   # 渲染后端, 默认为 puppeteer
+   # 渲染后端, 默认为 playwright
    name: playwright
    ```
 
@@ -82,17 +82,15 @@
 ### 注意事项
 
 - 首次安装需要下载 Chromium 浏览器（约 300MB），请确保网络畅通
-- 如果 Playwright 截图超时，系统会自动降级到 Puppeteer 渲染器
-- 建议在 `config/config/bot.yaml` 中配置 `puppeteer_deviceScaleFactor` 来调整清晰度
+- 建议在 `config/config/bot.yaml` 中配置 `deviceScaleFactor` 来调整清晰度
 
 ## ✨ 主要优化内容
 
 ### 🔧 功能增强
 - **违规记录查询** - 新增个人违规记录查询功能
 - **图片优化** - 优化 404 和超时错误图片显示
-- **Puppeteer 集成** - 添加 karin-puppeteer 支持
 - **状态可视化** - 状态和日志改为图片形式展示
-- **playwright渲染器** - 支持playwright渲染器
+- **playwright渲染器** - 使用 playwright 作为默认渲染器
 
 ### 🛠️ 系统优化
 - **自动备份** - 新增自动备份和定时清理功能

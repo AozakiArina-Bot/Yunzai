@@ -1,7 +1,7 @@
 import cfg from "../../lib/config/config.js"
 import fs from "node:fs/promises"
 import { Restart } from "./restart.js"
-import puppeteer from "../../lib/puppeteer/puppeteer.js"
+import renderer from "../../lib/renderer/loader.js"
 
 let uping = false
 
@@ -507,8 +507,8 @@ export class update extends plugin {
       logData
     }
 
-    // 使用 puppeteer 渲染图片
-    let img = await puppeteer.screenshot("version", html)
+    // 使用 renderer 渲染图片
+    let img = await renderer.screenshot("version", html)
     if (img) await this.e.reply(img)
   }
 }

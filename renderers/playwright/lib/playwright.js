@@ -17,7 +17,7 @@ export default class Playwright extends Renderer {
     this.shoting = []
     this.restartNum = 100
     this.renderNum = 0
-    this.deviceScaleFactor = Number(config.deviceScaleFactor || cfg?.bot?.puppeteer_deviceScaleFactor || 1) || 1
+    this.deviceScaleFactor = Number(config.deviceScaleFactor || cfg?.bot?.deviceScaleFactor || 1) || 1
     this.config = {
       headless: true,
       ...config
@@ -74,7 +74,7 @@ export default class Playwright extends Renderer {
     this.shoting.push(name)
 
     let overtime
-    const timeout = cfg?.bot?.puppeteer_timeout || 0
+    const timeout = cfg?.bot?.timeout || 0
     if (timeout > 0) {
       overtime = setTimeout(() => {
         if (this.shoting.length) {

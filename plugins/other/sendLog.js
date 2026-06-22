@@ -2,7 +2,7 @@ import lodash from "lodash"
 import moment from "moment"
 import fs from "node:fs/promises"
 import cfg from "../../lib/config/config.js"
-import puppeteer from "../../lib/puppeteer/puppeteer.js"
+import renderer from "../../lib/renderer/loader.js"
 
 const _path = process.cwd() + "/resources/html"
 
@@ -109,7 +109,7 @@ export class sendLog extends plugin {
       quality: 100
     }
 
-    let img = await puppeteer.screenshot("log", html)
+    let img = await renderer.screenshot("log", html)
     if (img) await this.e.reply(img)
     return true
   }
