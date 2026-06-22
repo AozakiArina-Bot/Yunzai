@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import puppeteer from "../../lib/puppeteer/puppeteer.js"
+import renderer from "../../lib/renderer/loader.js"
 
 const loginList = {}
 const _path = process.cwd() + "/resources/html"
@@ -204,7 +204,7 @@ export class 违规记录 extends plugin {
       quality: 100
     }
 
-    let img = await puppeteer.screenshot("ViolationRecord", html)
+    let img = await renderer.screenshot("ViolationRecord", html)
     if (img) await this.e.reply(img)
     return true
   }

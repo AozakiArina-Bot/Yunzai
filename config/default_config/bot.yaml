@@ -38,24 +38,6 @@ msg_type_count: false
 
 # chromium其他路径
 chromium_path:
-# puppeteer接口地址
-puppeteer_ws:
-# puppeteer截图超时时间
-puppeteer_timeout:
-# puppeteer渲染缩放数字越大清晰度越大
-puppeteer_deviceScaleFactor: 1
-# puppeteer截图质量
-puppeteer_quality: 100
-# 是否使用Karin Puppeteer
-karin_puppeteer: false
-# Karin Puppeteer 地址
-karin_puppeteer_ws: http://127.0.0.1:7005/puppeteer
-# 是否全是静态资源
-karin_puppeteer_static: true
-# Karin Puppeteer 截图超时时间
-karin_puppeteer_timeout: 120
-# Karin Puppeteer 授权
-karin_puppeteer_authorization: 123456
 
 # 米游社接口代理地址，国际服用
 proxyAddress:
