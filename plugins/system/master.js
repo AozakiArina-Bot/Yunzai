@@ -1,6 +1,7 @@
 import fs from "node:fs/promises"
 import { ulid } from "ulid"
 import YAML from "yaml"
+import cfg from "../../lib/config/config.js"
 const code = {}
 const file = "config/config/other.yaml"
 export class master extends plugin {
@@ -32,6 +33,14 @@ export class master extends plugin {
     let msg = ""
     for (const i in code) { msg += `[${i}] ${code[i]}\n` }
     return this.reply(msg.trim() || "暂无验证码", true)
+  }
+
+  masterList () {
+    const msg = Object.entries(cfg.master)
+      .filter(([, users]) => users.length)
+      .map(([botId, users]) => `[${botId}]\n${users.join("\n")}`)
+      .join("\n")
+    return this.reply(msg || "暂无主人", true)
   }
 
   async edit (file, key, value) {
